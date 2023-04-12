@@ -28,7 +28,7 @@ class handDetector():
                     self.mpDraw.draw_landmarks(img,handLms,self.mpHands.HAND_CONNECTIONS,self.handLmsStyle,self.handConStyle)
         return img       
 
-    def findPosition(self, img, handNo = 0):
+    def findPosition(self, img, handNo = 0,draw = True):
         lmList = []
         if self.result.multi_hand_landmarks:
             myHand = self.result.multi_hand_landmarks[handNo]
@@ -38,20 +38,22 @@ class handDetector():
                 xPos = int(lm.x * imgWidth)
                 yPos = int(lm.y * imgHeight)         
                 lmList.append([id, xPos, yPos])
-  
+            if draw:
+                 cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
         return lmList
 
 def main():
     pTime = 0
     cTime = 0
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)#镜头编号0，自带摄像头。编号1自定义摄像头
+    cap = cv2.VideoCapture(0)#镜头编号0，自带摄像头。编号1自定义摄像头
     detector = handDetector()
     while True:
         ret,img = cap.read()#cap.read会回传两个数据
-        img = detector.findHands(img)
-        lmList = detector.findPosition(img)
+        img = detector.findHands(img, draw = True)
+        lmList = detector.findPosition(img, draw = False)
         if len(lmList) != 0:
-            print(lmList[1])
+            print(lmList)
+            #print(lmList[0])只显示第0个点的位置
 
         cTime = time.time()
         fps = 1/(cTime-pTime)

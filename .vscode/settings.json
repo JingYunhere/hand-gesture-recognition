@@ -1,6 +1,10 @@
 {
     "cSpell.words": [
+        "CLSCTX",
+        "comtypes",
         "DSHOW",
-        "imshow"
+        "imshow",
+        "interp",
+        "pycaw"
     ]
 }
