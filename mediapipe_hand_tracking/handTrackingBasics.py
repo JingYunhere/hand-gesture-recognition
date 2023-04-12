@@ -7,6 +7,7 @@ cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)#镜头编号0，自带摄像头。编�
 mpHands = mp.solutions.hands#选择mediapipe的手部模型
 hands = mpHands.Hands(False, 2, 1, 0.5, 0.5)
 mpDraw = mp.solutions.drawing_utils#利用mediapipe提供的函数，画出手上21点
+
 handLmsStyle = mpDraw.DrawingSpec(color=(0,0,255),thickness=5)
 handConStyle = mpDraw.DrawingSpec(color=(0,255,0),thickness=10)
 pTime = 0

@@ -14,32 +14,27 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 
 pTime = 0
-detector = htm.handDetector(detectionCon=0.7)
+detector = htm.handDetector(detectionCon=0.8)
 
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
-# volume.GetMute()
-# volume.GetMasterVolumeLevel()
+
 volRange = volume.GetVolumeRange()
 minVol = volRange[0]#音量下限
 maxVol = volRange[1]#音量上限
-vol = 0
-volBar = 400
-volPer = 0
+
 while True:
     ret, img = cap.read()
-    img = detector.findHands(img)
+    img = detector.findHands(img,draw=False)
     lmList = detector.findPosition(img, draw=False)
     if len(lmList) != 0:
         x1, y1 = lmList[4][1], lmList[4][2]
         x2, y2 = lmList[8][1], lmList[8][2]
-        cx, cy = (x1 + x2) // 2, (y1 + y2) // 2#计算两指尖间距离中心
 
         cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
         cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
         cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
-        cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
 
         length = math.hypot(x2 - x1, y2 - y1)#计算两指尖间距离
         # 指尖范围（距离摄像头20cm） 50 - 300
@@ -49,8 +44,9 @@ while True:
         volume.SetMasterVolumeLevel(vol, None)
 
         if length <50:
-            cv2.circle(img, (cx, cy), 15, (0, 255, 0), cv2.FILLED)
-
+            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
+        if length >300:
+            cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), 3)
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
