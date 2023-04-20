@@ -42,28 +42,28 @@ class handDetector():
                  cv2.circle(img, (xPos, yPos), 15, (255, 0, 255), cv2.FILLED)
         return lmList
 
-def main():
-    pTime = 0
-    cTime = 0
-    cap = cv2.VideoCapture(0)#镜头编号0，自带摄像头。编号1自定义摄像头
-    detector = handDetector()
-    while True:
-        ret,img = cap.read()#cap.read会回传两个数据
-        img = detector.findHands(img, draw = True)
-        lmList = detector.findPosition(img, draw = False)
-        if len(lmList) != 0:
-            print(lmList)
-            #print(lmList[0])只显示第0个点的位置
+# def main():
+#     pTime = 0
+#     cTime = 0
+#     cap = cv2.VideoCapture(0)#镜头编号0，自带摄像头。编号1自定义摄像头
+#     detector = handDetector()
+#     while True:
+#         ret,img = cap.read()#cap.read会回传两个数据
+#         img = detector.findHands(img, draw = True)
+#         lmList = detector.findPosition(img, draw = False)
+#         if len(lmList) != 0:
+#             print(lmList)
+#             #print(lmList[0])只显示第0个点的位置
 
-        cTime = time.time()
-        fps = 1/(cTime-pTime)
-        pTime = cTime
+#         cTime = time.time()
+#         fps = 1/(cTime-pTime)
+#         pTime = cTime
 
-        cv2.putText(img, f"FPS:{int(fps)}", (30,50), cv2.FONT_HERSHEY_SIMPLEX,1, (255,0,0), 3)
+#         cv2.putText(img, f"FPS:{int(fps)}", (30,50), cv2.FONT_HERSHEY_SIMPLEX,1, (255,0,0), 3)
 
-        cv2.imshow("image", img)
-        cv2.waitKey(1)
+#         cv2.imshow("image", img)
+#         cv2.waitKey(1)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

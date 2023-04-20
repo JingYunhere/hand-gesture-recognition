@@ -15,6 +15,7 @@ cTime = 0
 
 while True:
     ret,img = cap.read()#cap.read会回传两个数据
+    img = cv2.flip(img, 1)#输出图像水平镜像
     
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#将opencv2读到的BGR图片转换成RGB给mediapipe用
     result = hands.process(imgRGB)
@@ -22,6 +23,7 @@ while True:
     imgHeight = img.shape[0]
     imgWidth = img.shape[1]
 
+    #process-landmarks
     if result.multi_hand_landmarks:
         for handLms in result.multi_hand_landmarks:#遍历21点坐标列表
             #参数一画在img上，参数二数据是handLms，参数三21点连起来，参数四点的样式，参数五线的样式
@@ -31,7 +33,15 @@ while True:
                 yPos = int(lm.y * imgHeight)
                 print(i,xPos,yPos)
     
-    cTime = time.time()
+    #process-handedness
+    if result.multi_handedness:
+        for handDns in result.multi_handedness:
+            for j,Dn in enumerate(handDns.classification):
+                print(Dn.index)#打印索引
+                print(Dn.score)#打印置信度
+                print(Dn.label)#打印标签（左右手）
+
+    cTime = time.time() 
     fps = 1/(cTime-pTime)
     pTime = cTime
     
