@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "avarge",
+        "brect",
         "CLSCTX",
         "comtypes",
         "DSHOW",
@@ -8,6 +9,7 @@
         "imshow",
         "interp",
         "numfps",
-        "pycaw"
+        "pycaw",
+        "seaborn"
     ]
 }

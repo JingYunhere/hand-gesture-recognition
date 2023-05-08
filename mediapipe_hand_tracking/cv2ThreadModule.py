@@ -41,3 +41,20 @@ class CameraThread(Thread):
             if ms < time_cycle:
                 time.sleep((time_cycle - ms) / 1000.0)
 
+    def form(self):
+        self.read_lock.acquire()
+        imgRGB = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)#将opencv2读到的BGR图片转换成RGB给mediapipe用
+        self.read_lock.release()
+        return imgRGB
+
+    def drawing(self, length, img, x1, y1, x2, y2):
+        self.read_lock.acquire()
+        cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
+        cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
+        cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
+        if length <50:
+            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
+        if length >300:
+            cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), 3)
+        self.read_lock.release()
+        return img

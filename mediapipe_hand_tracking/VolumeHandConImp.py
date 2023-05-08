@@ -39,29 +39,26 @@ maxVol = volRange[1]#音量上限
 
 while True:
     # ret, img = cap.read()
+    camera.update()
     img = cam.read()
-    img = detector.findHands(img,draw=False)
+    imgRGB = cam.form()
+    img = detector.findHands(img,imgRGB,draw=False)
     lmList = detector.findPosition(img, draw=False)
     if len(lmList) != 0:
         x1, y1 = lmList[4][1], lmList[4][2]
         x2, y2 = lmList[8][1], lmList[8][2]
 
-        cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
-        cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
-
         length = math.hypot(x2 - x1, y2 - y1)#计算两指尖间距离
         # 指尖范围（距离摄像头20cm） 50 - 300
         # 音量范围-63 - 0
+
+        #手指间距离上下限画图
+        cam.drawing(length, img, x1, y1, x2, y2)
+
         vol = np.interp(length, [50, 300], [minVol, maxVol])
         print(int(length), vol)
         volume.SetMasterVolumeLevel(vol, None)
 
-        if length <50:
-            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
-        if length >300:
-            cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), 3)
-    camera.update()
     camera.stop()
     num = float(format(camera.fps()))
     cv2.putText(img, f"Average number:{int(num)}", (30,50), cv2.FONT_HERSHEY_SIMPLEX,1, (255,0,0), 3)

@@ -27,7 +27,8 @@ maxVol = volRange[1]#音量上限
 
 while True:
     ret, img = cap.read()
-    img = detector.findHands(img,draw=False)
+    imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#将opencv2读到的BGR图片转换成RGB给mediapipe用  
+    img = detector.findHands(img,imgRGB,draw=False)      
     lmList = detector.findPosition(img, draw=False)
     if len(lmList) != 0:
         x1, y1 = lmList[4][1], lmList[4][2]

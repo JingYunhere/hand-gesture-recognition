@@ -17,8 +17,8 @@ class handDetector():
         self.handLmsStyle = self.mpDraw.DrawingSpec(color=(0,0,255),thickness=10)
         self.handConStyle = self.mpDraw.DrawingSpec(color=(0,255,0),thickness=3)
 
-    def findHands(self,img,draw = True):
-        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#将opencv2读到的BGR图片转换成RGB给mediapipe用
+    def findHands(self,img,imgRGB,draw = True):
+        # imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#将opencv2读到的BGR图片转换成RGB给mediapipe用
         self.result = self.hands.process(imgRGB)
 
         if self.result.multi_hand_landmarks:
